@@ -1,8 +1,8 @@
 // Nodes for Linked List
 class Node {
-  constructor(value = null, next = null) {
+  constructor(value = null, nextNode = null) {
     this.value = value;
-    this.next = next;
+    this.nextNode = nextNode;
   }
 }
 
@@ -18,10 +18,10 @@ class LinkedList {
       this.head = new Node(value);
     } else {
       let current = this.head;
-      while (current.next !== null) {
-        current = current.next;
+      while (current.nextNode !== null) {
+        current = current.nextNode;
       }
-      current.next = new Node(value);
+      current.nextNode = new Node(value);
     }
     this.size++;
   }
@@ -29,7 +29,7 @@ class LinkedList {
   // prepend(value) adds a new node containing value to the start of the list
   prepend(value) {
     const newNode = new Node(value);
-    newNode.next = this.head;
+    newNode.nextNode = this.head;
     this.head = newNode;
     this.size++;
   }
@@ -46,23 +46,26 @@ class LinkedList {
 
   // tail returns the last node in the list
   tail() {
+    if (this.size === 0) {
+      return "List is empty";
+    }
     let current = this.head;
-    while (current.next !== null) {
-      current = current.next;
+    while (current.nextNode !== null) {
+      current = current.nextNode;
     }
     return current;
   }
 
   // at(index) returns the node at the given index
   at(index) {
-    if (index > this.size || index < 0) {
+    if (index >= this.size || index < 0) {
       return "Index out of bounds";
     }
 
     let current = this.head;
     let count = 0;
     while (count < index) {
-      current = current.next;
+      current = current.nextNode;
       count++;
     }
     return current;
@@ -80,11 +83,11 @@ class LinkedList {
       this.head = null;
     } else {
       let current = this.head;
-      while (current.next.next !== null) {
-        current = current.next;
+      while (current.nextNode.nextNode !== null) {
+        current = current.nextNode;
       }
-      value = current.next.value;
-      current.next = null;
+      value = current.nextNode.value;
+      current.nextNode = null;
     }
     this.size--;
     return value;
@@ -97,7 +100,7 @@ class LinkedList {
       if (current.value === value) {
         return true;
       }
-      current = current.next;
+      current = current.nextNode;
     }
     return false;
   }
@@ -111,7 +114,7 @@ class LinkedList {
         if (current.value === value) {
           return index;
         }
-        current = current.next;
+        current = current.nextNode;
         index++;
       }
     } else {
@@ -125,7 +128,7 @@ class LinkedList {
     let string = "";
     while (current !== null) {
       string += `(${current.value}) -> `;
-      current = current.next;
+      current = current.nextNode;
     }
     string += "null";
     return string;
@@ -136,63 +139,35 @@ class LinkedList {
     if (index == 0) return this.prepend(value);
     if (index == this.size) return this.append(value);
 
-    if (index > this.size || index < 0) {
+    if (index >= this.size || index < 0) {
       return "Index out of bounds";
     }
 
     const newNode = new Node(value);
     let current = this.head;
     for (let i = 0; i < index - 1; i++) {
-      current = current.next;
+      current = current.nextNode;
     }
-    newNode.next = current.next;
-    current.next = newNode;
+    newNode.nextNode = current.nextNode;
+    current.nextNode = newNode;
     this.size++;
   }
 
   // removeAt(index) that removes the node at the given index.
   removeAt(index) {
-    if (index > this.size || index < 0) {
+    if (index >= this.size || index < 0) {
       return "Index out of bounds";
     }
 
     if (index === 0) {
-      this.head = this.head.next;
+      this.head = this.head.nextNode;
     } else {
       let current = this.head;
       for (let i = 0; i < index - 1; i++) {
-        current = current.next;
+        current = current.nextNode;
       }
-      current.next = current.next.next;
+      current.nextNode = current.nextNode.nextNode;
     }
     this.size--;
   }
 }
-
-// Node Tests
-// const node = new Node(1, new Node(2, new Node(3, new Node(4, new Node(5)))));
-
-// console.log(node);
-
-const list = new LinkedList();
-
-list.append("one");
-list.append("two");
-list.append("three");
-
-console.log(list);
-
-list.prepend("zero");
-
-console.log(list);
-console.log(list.at(-1));
-console.log(list.at(2));
-
-console.log(list.pop());
-
-console.log(list);
-
-console.log(`contains("Zero"): ${list.contains("zero")}`);
-console.log(`find("two"): ${list.find("two")}`);
-
-console.log(list.toString());
